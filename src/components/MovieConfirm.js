@@ -1,21 +1,23 @@
 import React from 'react'
 import styles from './styles'
+import { connect } from 'react-redux'
+import { updateMovieList } from '../ducks/reducers/movieReducer'
 
 const MovieConfirm = props => {
+  const { title, poster, rating } = props
+
   const confirmMovie = () => {
+    props.updateMovieList({ title, poster, rating })
     props.history.push('/list')
   }
 
   return (
     <div style={styles.container}>
       <p style={styles.containerHeading}>CONFIRM YOUR DETAILS</p>
-      <p style={styles.confirmText}>{`TITLE - RATING`}</p>
-      <img src={`URL`} alt="Movie Poster" />
+      <p style={styles.confirmText}>{`${props.title} - ${props.rating}`}</p>
+      <img src={props.poster} alt='Movie Poster' />
       <div>
-        <button
-          onClick={() => props.history.push('/')}
-          style={styles.formButton}
-        >
+        <button onClick={() => props.history.push('/')} style={styles.formButton}>
           BACK
         </button>
         <button onClick={confirmMovie} style={styles.formButton}>
@@ -25,4 +27,10 @@ const MovieConfirm = props => {
     </div>
   )
 }
-export default MovieConfirm
+
+const mapStateToProps = state => {
+  const { title, poster, rating } = state
+  return { title, poster, rating }
+}
+
+export default connect(mapStateToProps, { updateMovieList })(MovieConfirm)
